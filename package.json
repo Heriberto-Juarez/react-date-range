@@ -1,6 +1,6 @@
 {
   "name": "@herii/react-date-range",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "A fork from react-date-range - A React component for choosing dates and date ranges.",
   "main": "dist/index.js",
   "scripts": {
