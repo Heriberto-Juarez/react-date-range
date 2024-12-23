@@ -7,10 +7,7 @@
 
 A date library agnostic React component for choosing dates and date ranges. Uses [date-fns](http://date-fns.org/) for date operations.
 
-# Notice ⚠️
-This project is currently unmaintained because the original maintainers are busy with other things. It should be pretty stable in it's current state but we won't be updating it in the foreseeable future. **If you are willing to maintain it, please fork and open a pr adding your fork's link to this readme.**
-
-### Why should you use `react-date-range`?
+### Why should you use `@herii/react-date-range`?
 
 - Stateless date operations
 - Highly configurable
@@ -19,16 +16,13 @@ This project is currently unmaintained because the original maintainers are busy
 - Drag n Drop selection
 - Keyboard friendly
 
-**Live Demo :** [http://hypeserver.github.io/react-date-range](http://hypeserver.github.io/react-date-range)
-
-![](https://raw.githubusercontent.com/hypeserver/react-date-range/master/demo/ss.png)
 
 
 ## Getting Started
 ### Installation
 
 ```
-npm install --save react-date-range
+npm install --save @herii/react-date-range
 ```
 This plugin expects `react` and `date-fns` as peerDependencies, It means that you need to install them in your project folder.
 
@@ -41,13 +35,13 @@ npm install --save react date-fns
 You need to import skeleton and theme styles first.
 
 ```javascript
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import '@herii/react-date-range/dist/styles.css'; // main style file
+import '@herii/react-date-range/dist/theme/default.css'; // theme css file
 ```
 
 ### `DatePicker`
 ```javascript
-import { Calendar } from 'react-date-range';
+import { Calendar } from '@herii/react-date-range';
 
 class MyComponent extends Component {
   handleSelect(date){
@@ -67,7 +61,7 @@ class MyComponent extends Component {
 
 ### `DateRangePicker / DateRange`
 ```javascript
-import { DateRangePicker } from 'react-date-range';
+import { DateRangePicker } from '@herii/react-date-range';
 
 class MyComponent extends Component {
   handleSelect(ranges){
