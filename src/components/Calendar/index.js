@@ -7,6 +7,8 @@ import { calcFocusDate, generateStyles, getMonthDisplayRange } from '../../utils
 import classnames from 'classnames';
 import ReactList from 'react-list';
 import { shallowEqualObjects } from 'shallow-equal';
+import Select from 'react-select';
+
 import {
   addMonths,
   subMonths,
@@ -30,6 +32,34 @@ import {
 import { enUS as defaultLocale } from 'date-fns/locale/en-US';
 import coreStyles from '../../styles';
 import { ariaLabelsShape } from '../../accessibility';
+
+const customStyles = {
+  control: provided => ({
+    ...provided,
+    border: 'none', // Remove border
+    boxShadow: 'none', // Remove box-shadow
+    padding: '0 8px', // Add some padding if you want
+    minHeight: '35px', // Optional: adjust minHeight
+  }),
+  option: provided => ({
+    ...provided,
+    border: 'none', // Remove borders from options
+    padding: '8px 12px', // Add padding for options
+  }),
+  singleValue: provided => ({
+    ...provided,
+    padding: '0', // Remove padding
+    color: '#100147',
+    'font-weight': '600',
+  }),
+  placeholder: provided => ({
+    ...provided,
+    marginLeft: '0', // Remove margin if necessary
+    color: '#100147',
+    'font-weight': '600',
+  }),
+  dropdownIndicator: () => null,
+};
 
 class Calendar extends PureComponent {
   constructor(props, context) {
@@ -99,9 +129,9 @@ class Calendar extends PureComponent {
   updateShownDate = (props = this.props) => {
     const newProps = props.scroll.enabled
       ? {
-        ...props,
-        months: this.list.getVisibleRange().length,
-      }
+          ...props,
+          months: this.list.getVisibleRange().length,
+        }
       : props;
     const newFocus = calcFocusDate(this.state.focusedDate, newProps);
     this.focusToDate(newFocus, newProps);
@@ -190,64 +220,118 @@ class Calendar extends PureComponent {
     const upperYearLimit = (maxDate || Calendar.defaultProps.maxDate).getFullYear();
     const lowerYearLimit = (minDate || Calendar.defaultProps.minDate).getFullYear();
     const styles = this.styles;
+
+    const yearOptions = new Array(upperYearLimit - lowerYearLimit + 1)
+      .fill(upperYearLimit)
+      .map((val, i) => {
+        const year = val - i;
+        return { value: year, label: year };
+      });
+
     return (
       <div onMouseUp={e => e.stopPropagation()} className={styles.monthAndYearWrapper}>
-        {showMonthArrow ? (
-          <button
-            type="button"
-            className={classnames(styles.nextPrevButton, styles.prevButton)}
-            onClick={() => changeShownDate(-1, 'monthOffset')}
-            aria-label={ariaLabels.prevButton}>
-            <i />
-          </button>
-        ) : null}
         {showMonthAndYearPickers ? (
-          <span className={styles.monthAndYearPickers}>
-            <span className={styles.monthPicker}>
-              <select
-                value={focusedDate.getMonth()}
-                onChange={e => changeShownDate(e.target.value, 'setMonth')}
-                aria-label={ariaLabels.monthPicker}>
-                {this.state.monthNames.map((monthName, i) => (
-                  <option key={i} value={i}>
-                    {monthName}
-                  </option>
-                ))}
-              </select>
-            </span>
-            <span className={styles.monthAndYearDivider} />
-            <span className={styles.yearPicker}>
-              <select
-                value={focusedDate.getFullYear()}
-                onChange={e => changeShownDate(e.target.value, 'setYear')}
-                aria-label={ariaLabels.yearPicker}>
-                {new Array(upperYearLimit - lowerYearLimit + 1)
-                  .fill(upperYearLimit)
-                  .map((val, i) => {
-                    const year = val - i;
-                    return (
-                      <option key={year} value={year}>
-                        {year}
-                      </option>
-                    );
-                  })}
-              </select>
-            </span>
-          </span>
+          <div className={styles.monthAndYearPickers}>
+            <div className={styles.monthPicker}>
+              {showMonthArrow ? (
+                <button
+                  type="button"
+                  className={classnames(styles.nextPrevButton, styles.prevButton)}
+                  onClick={() => changeShownDate(-1, 'monthOffset')}
+                  aria-label={ariaLabels.prevButton}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none">
+                    <path
+                      d="M15 5L9 12L15 19"
+                      stroke="#100147"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              ) : null}
+              <Select
+                value={this.state.monthNames[focusedDate.getMonth()]}
+                onChange={selectedOption =>
+                  changeShownDate(this.state.monthNames.indexOf(selectedOption.value), 'setMonth')
+                }
+                placeholder={this.state.monthNames[focusedDate.getMonth()]}
+                options={this.state.monthNames.map(month => ({ value: month, label: month }))}
+                aria-label={ariaLabels.monthPicker}
+                styles={customStyles}
+                components={{
+                  DropdownIndicator: () => null,
+                  IndicatorSeparator: () => null,
+                }}
+              />
+              {showMonthArrow ? (
+                <button
+                  type="button"
+                  className={classnames(styles.nextPrevButton, styles.nextButton)}
+                  onClick={() => changeShownDate(+1, 'monthOffset')}
+                  aria-label={ariaLabels.nextButton}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none">
+                    <path
+                      d="M9 5L15 12L9 19"
+                      stroke="#100147"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              ) : null}
+            </div>
+            <div className={styles.yearPicker} style={{ cursor: 'pointer' }}>
+              <Select
+                className="react-select"
+                value={{
+                  value: focusedDate.getFullYear(),
+                  label: focusedDate.getFullYear(),
+                }}
+                onChange={selectedOption => changeShownDate(selectedOption.value, 'setYear')}
+                options={yearOptions}
+                aria-label={ariaLabels.yearPicker}
+                styles={customStyles}
+                components={{
+                  DropdownIndicator: () => (
+                    <div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none">
+                        <path
+                          d="M19 9L12 15L5 9"
+                          stroke="#100147"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  ),
+                  IndicatorSeparator: () => null,
+                }}
+              />
+            </div>
+          </div>
         ) : (
           <span className={styles.monthAndYearPickers}>
             {this.state.monthNames[focusedDate.getMonth()]} {focusedDate.getFullYear()}
           </span>
         )}
-        {showMonthArrow ? (
-          <button
-            type="button"
-            className={classnames(styles.nextPrevButton, styles.nextButton)}
-            onClick={() => changeShownDate(+1, 'monthOffset')}
-            aria-label={ariaLabels.nextButton}>
-            <i />
-          </button>
-        ) : null}
       </div>
     );
   };
@@ -530,7 +614,7 @@ Calendar.defaultProps = {
   showMonthArrow: true,
   showMonthAndYearPickers: true,
   disabledDates: [],
-  disabledDay: () => { },
+  disabledDay: () => {},
   classNames: {},
   locale: defaultLocale,
   ranges: [],
@@ -543,14 +627,14 @@ Calendar.defaultProps = {
   showPreview: true,
   displayMode: 'date',
   months: 1,
-  color: '#3d91ff',
+  color: '#C6D2FD',
   scroll: {
     enabled: false,
   },
   direction: 'vertical',
   maxDate: addYears(new Date(), 20),
   minDate: addYears(new Date(), -100),
-  rangeColors: ['#3d91ff', '#3ecf8e', '#fed14c'],
+  rangeColors: ['#C6D2FD', '#3ecf8e', '#fed14c'],
   startDatePlaceholder: 'Early',
   endDatePlaceholder: 'Continuous',
   editableDateInputs: false,

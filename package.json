@@ -4,13 +4,15 @@
   "description": "A fork from react-date-range - A React component for choosing dates and date ranges.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "yarn build:css & styleguidist server",
+    "start": "yarn watch:css & yarn watch:js & styleguidist server",
     "build": "yarn build:css & yarn build:js & styleguidist build",
     "build:css": "postcss 'src/styles.scss' -d dist --ext css & postcss 'src/theme/*.scss' -d 'dist/theme' --ext css",
     "build:js": "babel ./src --out-dir ./dist --ignore test.js",
     "lint": "eslint 'src/**/*.js'",
     "test": "jest",
-    "preversion": "yarn clear & yarn build"
+    "preversion": "yarn clear & yarn build",
+    "watch:css": "postcss 'src/styles.scss' -d dist --ext css --watch & postcss 'src/theme/*.scss' -d 'dist/theme' --ext css --watch",
+    "watch:js": "babel ./src --out-dir ./dist --ignore test.js --watch"
   },
   "keywords": [
     "react",
@@ -30,10 +32,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "http://github.com/hypeserver/react-date-range"
+    "url": "https://github.com/Heriberto-Juarez/react-date-range"
   },
   "bugs": {
-    "url": "http://github.com/hypeserver/react-date-range/issues"
+    "url": "https://github.com/Heriberto-Juarez/react-date-range/issues"
   },
   "browserslist": [
     "defaults"
@@ -42,6 +44,7 @@
     "classnames": "^2.2.6",
     "prop-types": "^15.7.2",
     "react-list": "^0.8.13",
+    "react-select": "^5.9.0",
     "shallow-equal": "^1.2.1"
   },
   "peerDependencies": {

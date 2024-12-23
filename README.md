@@ -120,7 +120,7 @@ moveRangeOnFirstSelection(DateRange) | Boolean   | false            | move range
 retainEndDateOnFirstSelection(DateRange) | Boolean   | false            | Retain end date when the start date is changed, unless start date is later than end date. Ignored if `moveRangeOnFirstSelection` is set to true.
 onChange(Calendar)                   | Func      |                  | callback function for date changes. fn(date: Date)
 onChange(DateRange)                  | Func      |                  | callback function for range changes. fn(changes). changes contains changed ranges with new `startDate`/`endDate` properties.
-color(Calendar)                      | String    | `#3d91ff`        | defines color for selected date in Calendar
+color(Calendar)                      | String    | `#C6D2FD`        | defines color for selected date in Calendar
 date(Calendar)                       | Date      |                  | date value for Calendar
 showDateDisplay(DateRange)           | Boolean   | true             | show/hide selection display row. Uses `dateDisplayFormat` for formatter
 onShownDateChange(DateRange,Calendar)| Function  |                  | Callback function that is called when the shown date changes

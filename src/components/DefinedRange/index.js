@@ -135,7 +135,7 @@ DefinedRange.defaultProps = {
   inputRanges: defaultInputRanges,
   staticRanges: defaultStaticRanges,
   ranges: [],
-  rangeColors: ['#3d91ff', '#3ecf8e', '#fed14c'],
+  rangeColors: ['#C6D2FD', '#3ecf8e', '#fed14c'],
   focusedRange: [0, 0],
 };
 

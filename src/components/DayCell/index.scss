@@ -4,13 +4,17 @@
   position: relative;
   font: inherit;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .rdrDayNumber {
   display: block;
   position: relative;
+  
   span{
-    color: #1d2429;
+    color: #100147;
+    font-size: 15px;
+    line-height: 20px;
   }
 }
 
